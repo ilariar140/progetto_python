@@ -1,0 +1,13 @@
+import os
+import pandas as pd
+import kagglehub
+
+DATASET_ID = "grandmaster07/student-exam-performance-dataset-analysis"
+FILE_NAME  = "StudentPerformanceFactors.csv"
+OUTPUT_DIR = os.path.join(os.getcwd(), "desktop", "progetto", "data", "student")
+
+kagglehub.dataset_download(DATASET_ID, output_dir=OUTPUT_DIR)
+df = pd.read_csv(os.path.join(OUTPUT_DIR, FILE_NAME), index_col=0)
+
+df.shape 
+df.dtypes
