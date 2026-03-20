@@ -1,0 +1,23 @@
+import os
+import pandas as pd
+import kagglehub
+
+DATASET_ID = "grandmaster07/student-exam-performance-dataset-analysis"
+FILE_NAME  = "StudentPerformanceFactors.csv"
+OUTPUT_DIR = os.path.join(os.getcwd(), "data", "student")
+
+# crea la cartella
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+# scarica dataset
+dataset_path = kagglehub.dataset_download(DATASET_ID)
+
+print("Dataset salvato in:", dataset_path)
+
+# costruisci il path corretto al file
+file_path = os.path.join(dataset_path, FILE_NAME)
+
+# leggi il csv
+df = pd.read_csv(file_path)
+
+print(df.head())
