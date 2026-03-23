@@ -13,3 +13,10 @@ for i, row in df.iterrows():
 df = df.drop(rows_to_drop)
 
 print(df)
+
+### da variabili categoriche a numeriche - con ordine 
+from sklearn.preprocessing import LabelEncoder
+
+le = LabelEncoder()
+df['Parental_Involvement_encoded'] = le.fit_transform(df['Parental_Involvement'])
+print(dict(zip(le.classes_, le.transform(le.classes_))))
