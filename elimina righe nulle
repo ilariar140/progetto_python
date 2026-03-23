@@ -1,0 +1,15 @@
+import pandas as pd
+
+df = pd.read_csv('file.csv')
+
+rows_to_drop = []
+
+for i, row in df.iterrows():
+    # Controlla se c'è almeno un valore nullo o vuoto
+    if any(value == '' or pd.isna(value) for value in row):
+        rows_to_drop.append(i)
+
+# Rimuovi le righe
+df = df.drop(rows_to_drop)
+
+print(df)
