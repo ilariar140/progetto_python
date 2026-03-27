@@ -1,0 +1,52 @@
+import os
+import pandas as pd
+import kagglehub
+
+DATASET_ID = "grandmaster07/student-exam-performance-dataset-analysis"
+FILE_NAME  = "StudentPerformanceFactors.csv"
+OUTPUT_DIR = os.path.join(os.getcwd(), "data", "student")
+
+# crea la cartella
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+# scarica dataset
+dataset_path = kagglehub.dataset_download(DATASET_ID)
+
+print("Dataset salvato in:", dataset_path)
+
+# costruisci il path corretto al file
+file_path = os.path.join(dataset_path, FILE_NAME)
+
+# leggi il csv
+df = pd.read_csv(file_path)
+
+print(df.head())
+
+#contare i nulli
+print(df.isnull().sum())
+rows_to_drop = []
+
+for i, row in df.iterrows():
+    # Controlla se c'è almeno un valore nullo o vuoto
+    if any(value == '' or pd.isna(value) for value in row):
+        rows_to_drop.append(i)
+
+#Rimuovi le righe
+df = df.drop(rows_to_drop)
+print(df.isnull().sum())
+
+#Trasformazione da categorici a numerici
+from sklearn.preprocessing import LabelEncoder, OrdinalEncoder
+
+le = LabelEncoder()
+df['Gender'] = le.fit_transform(df['Gender'])
+df['Internet_Access'] = le.fit_transform(df['Internet_Access'])
+df['School_Type'] = le.fit_transform(df['School_Type'])
+df['Extracurricular_Activities'] = le.fit_transform(df['Extracurricular_Activities'])
+df['Learning_Disabilities'] = le.fit_transform(df['Learning_Disabilities'])
+df['Peer_Influence'] = le.fit_transform(df['Peer_Influence'])
+
+cols = ['Parental_Involvement', 'Access_to_Resources', 'Motivation_Level', 'Family_Income','Teacher_Quality', 'Parental_Education_Level', 'Distance_from_Home']
+enc = OrdinalEncoder(dtype=int)
+df[cols] = enc.fit_transform(df[cols])
+print(df.head())
